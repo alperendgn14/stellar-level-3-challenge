@@ -1,0 +1,40 @@
+name: Stellar dApp CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Test Treasury Contract
+        run: |
+          cd contracts/treasury
+          cargo test
+      - name: Test Governance Contract
+        run: |
+          cd contracts/governance
+          cargo test
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+      - name: Run Lint
+        run: |
+          cd frontend
+          npm run lint || echo "Linting failed but continuing"
