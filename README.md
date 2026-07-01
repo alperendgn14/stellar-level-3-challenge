@@ -77,7 +77,18 @@ Then update `CONTRACT_ADDRESSES` in `frontend/src/utils/contract.ts` with your o
 
 ## 🖼 Screenshots
 
-_See `/screenshots` for mobile UI, CI pipeline run, and passing test output._
+**Mobile-responsive UI** (live GitHub Pages site on a phone):
+
+<img src="screenshots/mobile-ui.jpg" width="360" alt="Mobile responsive UI" />
+
+**CI/CD pipeline passing** (contracts + frontend jobs, GitHub Actions):
+
+![CI pipeline passing](screenshots/ci-pipeline.png)
+
+**3+ passing tests** (Treasury: 2 tests, Governance: 2 tests):
+
+![Treasury tests passing](screenshots/tests-passing-1.png)
+![Governance tests passing](screenshots/tests-passing-2.png)
 
 ## 🎬 Demo Video
 
@@ -90,5 +101,5 @@ _Link: (added after recording)_
 - [x] Live demo link (GitHub Pages)
 - [x] Contract deployment address (Stellar Testnet, see table above)
 - [x] Transaction hash for contract interaction (see table above)
-- [ ] Screenshots (mobile UI, CI/CD run, 3+ passing tests)
+- [x] Screenshots (mobile UI, CI/CD run, 3+ passing tests)
 - [ ] Demo video link
