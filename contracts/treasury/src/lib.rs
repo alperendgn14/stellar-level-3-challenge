@@ -10,7 +10,11 @@ pub struct Treasury;
 #[contractimpl]
 impl Treasury {
     pub fn init(env: Env, governance: Address) {
-        env.storage().instance().set(&Symbol::new(&env, "governance"), &governance);
+        let key = Symbol::new(&env, "governance");
+        if env.storage().instance().has(&key) {
+            panic!("Treasury already initialized");
+        }
+        env.storage().instance().set(&key, &governance);
     }
 
     pub fn set_governance(env: Env, new_governance: Address) {

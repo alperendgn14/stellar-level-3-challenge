@@ -22,6 +22,22 @@ mod tests {
         let _ = (&recipient, &token_admin);
     }
 
+    #[test]
+    #[should_panic(expected = "Treasury already initialized")]
+    fn test_treasury_cannot_be_reinitialized() {
+        let env = Env::default();
+        env.mock_all_auths();
+        let treasury_id = env.register(crate::Treasury, ());
+        let treasury_client = TreasuryClient::new(&env, &treasury_id);
+
+        let governance = Address::generate(&env);
+        let attacker_governance = Address::generate(&env);
+
+        treasury_client.init(&governance);
+        // Second call must panic to prevent governance hijacking.
+        treasury_client.init(&attacker_governance);
+    }
+
     struct TreasuryClient<'a> {
         env: &'a Env,
         address: Address,
