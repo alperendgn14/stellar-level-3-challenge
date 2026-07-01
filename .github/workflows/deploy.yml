@@ -1,3 +1,5 @@
+# Note: requires GitHub Pages "Source" to be set to "GitHub Actions" once,
+# under Settings > Pages, before this workflow can successfully publish.
 name: Deploy Frontend to GitHub Pages
 
 on:
