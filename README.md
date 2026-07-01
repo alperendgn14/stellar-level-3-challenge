@@ -92,7 +92,7 @@ Then update `CONTRACT_ADDRESSES` in `frontend/src/utils/contract.ts` with your o
 
 ## 🎬 Demo Video
 
-_Link: (added after recording)_
+https://www.youtube.com/watch?v=bFN5FUq6UhY
 
 ## 📋 Submission Checklist
 - [x] Public GitHub repository
@@ -102,4 +102,4 @@ _Link: (added after recording)_
 - [x] Contract deployment address (Stellar Testnet, see table above)
 - [x] Transaction hash for contract interaction (see table above)
 - [x] Screenshots (mobile UI, CI/CD run, 3+ passing tests)
-- [ ] Demo video link
+- [x] Demo video link
