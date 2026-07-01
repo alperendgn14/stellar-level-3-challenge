@@ -15,10 +15,16 @@ mod tests {
         let recipient = Address::generate(&env);
         let token = Address::generate(&env);
 
-        gov_client.propose(&1, &proposer, &recipient, &100, &token, &1000);
+        let id = gov_client.propose(&proposer, &recipient, &100, &token, &1000);
+        assert_eq!(id, 1);
+        assert_eq!(gov_client.get_proposal_count(), 1);
 
         let voter = Address::generate(&env);
-        gov_client.vote(&1, &true, &voter);
+        gov_client.vote(&id, &true, &voter);
+
+        let proposal = gov_client.get_proposal(&id);
+        assert_eq!(proposal.votes_for, 1);
+        assert_eq!(proposal.votes_against, 0);
     }
 
     #[test]
@@ -36,13 +42,13 @@ mod tests {
         let treasury = Address::generate(&env);
 
         // Long duration means the deadline has not passed yet.
-        gov_client.propose(&2, &proposer, &recipient, &500, &token, &100000);
+        let id = gov_client.propose(&proposer, &recipient, &500, &token, &100000);
 
         let voter = Address::generate(&env);
-        gov_client.vote(&2, &true, &voter);
+        gov_client.vote(&id, &true, &voter);
 
         // This should panic because the deadline hasn't passed.
-        gov_client.execute(&2, &treasury);
+        gov_client.execute(&id, &treasury);
     }
 
     struct GovernanceClient<'a> {
@@ -55,9 +61,9 @@ mod tests {
             Self { env, address: address.clone() }
         }
 
-        fn propose(&self, id: &u32, proposer: &Address, recipient: &Address, amount: &i128, token: &Address, duration: &u64) {
-            let args: soroban_sdk::Vec<Val> = (*id, proposer.clone(), recipient.clone(), *amount, token.clone(), *duration).into_val(self.env);
-            self.env.invoke_contract::<()>(&self.address, &Symbol::new(self.env, "propose"), args)
+        fn propose(&self, proposer: &Address, recipient: &Address, amount: &i128, token: &Address, duration: &u64) -> u32 {
+            let args: soroban_sdk::Vec<Val> = (proposer.clone(), recipient.clone(), *amount, token.clone(), *duration).into_val(self.env);
+            self.env.invoke_contract::<u32>(&self.address, &Symbol::new(self.env, "propose"), args)
         }
 
         fn vote(&self, id: &u32, support: &bool, voter: &Address) {
@@ -68,6 +74,16 @@ mod tests {
         fn execute(&self, id: &u32, treasury: &Address) {
             let args: soroban_sdk::Vec<Val> = (*id, treasury.clone()).into_val(self.env);
             self.env.invoke_contract::<()>(&self.address, &Symbol::new(self.env, "execute"), args)
+        }
+
+        fn get_proposal(&self, id: &u32) -> crate::Proposal {
+            let args: soroban_sdk::Vec<Val> = (*id,).into_val(self.env);
+            self.env.invoke_contract::<crate::Proposal>(&self.address, &Symbol::new(self.env, "get_proposal"), args)
+        }
+
+        fn get_proposal_count(&self) -> u32 {
+            let args: soroban_sdk::Vec<Val> = ().into_val(self.env);
+            self.env.invoke_contract::<u32>(&self.address, &Symbol::new(self.env, "get_proposal_count"), args)
         }
     }
 }

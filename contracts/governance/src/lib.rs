@@ -21,9 +21,12 @@ pub struct Governance;
 
 #[contractimpl]
 impl Governance {
-    pub fn propose(env: Env, id: u32, proposer: Address, recipient: Address, amount: i128, token: Address, duration: u64) {
+    pub fn propose(env: Env, proposer: Address, recipient: Address, amount: i128, token: Address, duration: u64) -> u32 {
         proposer.require_auth();
-        
+
+        let counter_key = Symbol::new(&env, "proposal_count");
+        let id: u32 = env.storage().instance().get(&counter_key).unwrap_or(0) + 1;
+
         let proposal = Proposal {
             recipient,
             amount,
@@ -34,6 +37,17 @@ impl Governance {
             deadline: env.ledger().timestamp() + duration,
         };
         env.storage().persistent().set(&id, &proposal);
+        env.storage().instance().set(&counter_key, &id);
+
+        id
+    }
+
+    pub fn get_proposal(env: Env, id: u32) -> Proposal {
+        env.storage().persistent().get(&id).expect("Proposal not found")
+    }
+
+    pub fn get_proposal_count(env: Env) -> u32 {
+        env.storage().instance().get(&Symbol::new(&env, "proposal_count")).unwrap_or(0)
     }
 
     pub fn vote(env: Env, id: u32, support: bool, voter: Address) {
