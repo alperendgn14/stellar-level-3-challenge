@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { connectWallet } from '../utils/wallet';
 import { Wallet } from 'lucide-react';
 
@@ -12,6 +12,7 @@ export const WalletConnect: React.FC<WalletConnectProps> = ({ onConnect }) => {
             const address = await connectWallet();
             onConnect(address);
         } catch (error) {
+            console.error("Wallet connect failed", error);
             alert("Failed to connect wallet");
         }
     };

@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { WalletConnect } from './components/WalletConnect';
 import { CreateProposal } from './components/CreateProposal';
 import { ProposalList } from './components/ProposalList';
-import { Wallet, Shield, Coins, Globe, Cpu } from 'lucide-react';
+import { Shield, Coins, Globe, Cpu } from 'lucide-react';
+import { signTransaction } from './utils/wallet';
+import type { WalletSigner } from './utils/contract';
 
 function App() {
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+  const wallet: WalletSigner | null = walletAddress
+    ? { publicKey: walletAddress, signTransaction }
+    : null;
 
   return (
     <div className="min-h-screen selection:bg-galactic-neon selection:text-galactic-deep">
@@ -80,7 +86,7 @@ function App() {
           
           <div className="grid lg:grid-cols-12 gap-8">
             <div className="lg:col-span-4 space-y-8">
-              <CreateProposal />
+              <CreateProposal wallet={wallet} />
               <div className="glass-panel p-6">
                 <h3 className="text-sm font-bold uppercase text-slate-500 mb-4">Treasury Status</h3>
                 <div className="flex justify-between items-end">
@@ -97,7 +103,7 @@ function App() {
               </div>
             </div>
             <div className="lg:col-span-8">
-              <ProposalList />
+              <ProposalList wallet={wallet} />
             </div>
           </div>
         </div>

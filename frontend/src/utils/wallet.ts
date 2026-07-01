@@ -19,6 +19,11 @@ export const connectWallet = async (): Promise<string> => {
     }
 };
 
+// Freighter's `signTransaction` already matches the `SignTransaction` shape
+// expected by @stellar/stellar-sdk's contract Client, so it can be passed
+// straight through when building a wallet-backed contract client.
+export { signTransaction };
+
 export const signAndSend = async (transactionXdr: string, networkPassphrase?: string) => {
     const result = await signTransaction(transactionXdr, { networkPassphrase });
     if (result.error) {
