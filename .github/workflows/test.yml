@@ -16,11 +16,11 @@ jobs:
       - name: Test Treasury Contract
         run: |
           cd contracts/treasury
-          cargo test
+          cargo test --features testutils
       - name: Test Governance Contract
         run: |
           cd contracts/governance
-          cargo test
+          cargo test --features testutils
 
   test-frontend:
     runs-on: ubuntu-latest
