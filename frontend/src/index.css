@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-galactic-deep: #0f0c29;
+  --color-galactic-dark: #1b1448;
+  --color-galactic-medium: #302b63;
+  --color-galactic-light: #4834d4;
+  --color-galactic-neon: #be93fd;
+  --color-galactic-accent: #00d2ff;
+
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px #be93fd, 0 0 10px #be93fd;
+  }
+  to {
+    box-shadow: 0 0 20px #be93fd, 0 0 30px #00d2ff;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-galactic-deep text-slate-100 min-h-screen overflow-x-hidden;
+    background: radial-gradient(circle at top right, #1b1448, #0f0c29);
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl;
+  }
+
+  .neon-button {
+    @apply relative overflow-hidden bg-galactic-light text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(72,52,212,0.6)] active:scale-95;
+  }
+
+  .neon-border {
+    @apply border-galactic-neon/30 hover:border-galactic-neon/60 transition-colors duration-300;
+  }
+}
+
+.stellar-gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-galactic-neon to-galactic-accent;
+}
